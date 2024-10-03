@@ -153,6 +153,9 @@ if unify_gene_symbols or symbol_col == "none":
 
     adata.var.index = adata.var.index.map(lambda x: mapping.get(x, x))
 
+# Replace all underlines and dots with dashes
+adata.var.index = adata.var.index.str.replace(r"[\._]", "-")
+
 # Aggregate duplicate genes
 method = "${params.var_aggr_method}"
 if not method in ["mean", "sum", "max"]:
