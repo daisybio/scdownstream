@@ -24,7 +24,7 @@ report_section_order:
     order: -1008
   "combat":
     order: -1009
-# If new tools are add. They need to be added here
+  # If new tools are add. They need to be added here
   "nf-core-scdownstream-methods-description":
     order: -2001
   "multiqc_software_versions":
