@@ -60,7 +60,7 @@ df.to_pickle(f"X_{prefix}.pkl")
 # Plot
 sc.pl.umap(adata, title="${meta.id} UMAP", color="batch", show=False)
 path = f"{prefix}.png"
-plt.savefig(path)
+plt.savefig(path, bbox_inches='tight')
 
 # MultiQC
 with open(path, "rb") as f_plot, open("${prefix}_mqc.json", "w") as f_json:
