@@ -29,6 +29,8 @@ report_section_order:
     order: -2001
   "multiqc_software_versions":
     order: -2002
+  software_versions:
+    order: -2002
   "nf-core-scdownstream-summary":
     order: -2003
 
