@@ -24,6 +24,7 @@ workflow PREPROCESS {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
     ch_h5ad = Channel.empty()
+    ch_h5ad_all = Channel.empty()
     ch_files = Channel.empty()
     ch_sizes = Channel.empty()
 
@@ -117,10 +118,12 @@ workflow PREPROCESS {
     ch_versions = ch_versions.mix(QC_RAW.out.versions)
 
     AMBIENT_RNA_REMOVAL(ch_complete)
+    ch_h5ad_all = ch_h5ad.mix(AMBIENT_RNA_REMOVAL.out.h5ad)
     ch_h5ad = AMBIENT_RNA_REMOVAL.out.h5ad
     ch_versions = ch_versions.mix(AMBIENT_RNA_REMOVAL.out.versions)
 
     SCANPY_FILTER(ch_h5ad)
+    ch_h5ad_all = ch_h5ad_all.mix(SCANPY_FILTER.out.h5ad)
     ch_h5ad = SCANPY_FILTER.out.h5ad
     ch_versions = ch_versions.mix(SCANPY_FILTER.out.versions)
 
@@ -130,6 +133,7 @@ workflow PREPROCESS {
         .map{ meta, txt -> [meta.id, 'thresholded', txt.text.toInteger()] })
 
     DOUBLET_DETECTION(ch_h5ad)
+    ch_h5ad_all = ch_h5ad_all.mix(DOUBLET_DETECTION.out.h5ad)
     ch_h5ad = DOUBLET_DETECTION.out.h5ad
     ch_multiqc_files = ch_multiqc_files.mix(DOUBLET_DETECTION.out.multiqc_files)
     ch_versions = ch_versions.mix(DOUBLET_DETECTION.out.versions)
@@ -155,6 +159,7 @@ workflow PREPROCESS {
     ch_multiqc_files = ch_multiqc_files.mix(COLLECT_SIZES.out.multiqc_files)
 
     emit:
+    h5ad_all      = ch_h5ad_all
     h5ad          = ch_h5ad
 
     multiqc_files = ch_multiqc_files

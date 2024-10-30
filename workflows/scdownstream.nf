@@ -48,13 +48,28 @@ workflow SCDOWNSTREAM {
         PREPROCESS(ch_samplesheet)
         ch_versions = ch_versions.mix(PREPROCESS.out.versions)
         ch_multiqc_files = ch_multiqc_files.mix(PREPROCESS.out.multiqc_files)
-        ch_h5ad = PREPROCESS.out.h5ad
-
+        
+        
+        
+        if (params.preprocess_only) {
+        ch_h5ad = PREPROCESS.out.h5ad_all
+        ch_h5ad_by_sample = ch_h5ad.map { meta, h5ad_file -> [meta, h5ad_file] }
+        ch_h5ad_grouped = ch_h5ad_by_sample.groupTuple()
+            FINALIZE(ch_h5ad_grouped,
+                ch_obs,
+                ch_obsm,
+                ch_obsp,
+                ch_uns,
+                ch_layers
+        )
+        
+        }
         //
         // Perform automated celltype assignment
         //
 
-        if (!params.preprocess_only) {
+        else {
+            ch_h5ad = PREPROCESS.out.h5ad
             CELLTYPE_ASSIGNMENT(ch_h5ad)
             ch_versions = ch_versions.mix(CELLTYPE_ASSIGNMENT.out.versions)
             ch_h5ad = CELLTYPE_ASSIGNMENT.out.h5ad
