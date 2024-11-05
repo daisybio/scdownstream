@@ -1,16 +1,16 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/nf-core/scdownstream/master/nextflow_schema.json",
     "title": "nf-core/scdownstream pipeline parameters",
     "description": "A single cell transcriptomics pipeline for QC, integration and making the results presentable",
     "type": "object",
-    "definitions": {
+    "$defs": {
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": ["outdir"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -43,11 +43,58 @@
                 }
             }
         },
+        "reference_mapping_options": {
+            "title": "Reference mapping options",
+            "type": "object",
+            "fa_icon": "fas fa-map-marked-alt",
+            "description": "Options for mapping new data to a reference. Check the [section in the usage docs](https://nf-co.re/scdownstream/docs/usage/#reference-mapping) for more information.",
+            "properties": {
+                "base_adata": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "If you want to project new data onto an already integrated object, specify the path to the base AnnData object here",
+                    "help_text": "The file should be in the .h5ad format.",
+                    "pattern": "^\\S+\\.h5ad$",
+                    "exists": true
+                },
+                "base_label_col": {
+                    "type": "string",
+                    "default": "label",
+                    "description": "The column in the base AnnData object that contains the label (e.g. cell type) information."
+                },
+                "base_embeddings": {
+                    "type": "string",
+                    "description": "The keys in the obsm of the base AnnData object that contain the embeddings (without leading `X_`). Required if `input` is not provided - otherwise it is ignored.",
+                    "help_text": "If the `input` parameter is not provided (no new data to add), integration will not be performed. In order to be able to utilize existing integration results, you need to provide the keys in the obsm of the base AnnData object that contain the embeddings (without leading `X_`).",
+                    "pattern": "^((scvi|scanvi|harmony|bbknn|combat|seurat)(,(scvi|scanvi|harmony|bbknn|combat|seurat))*)?$"
+                },
+                "reference_model": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "If you want to use a pre-trained scVI/scANVI model as a reference for integration, specify the path to the model `.pt` file here",
+                    "help_text": "The file should be in the .pt format. If provided, you also need to provide a `reference_model_type`.",
+                    "pattern": "^\\S+\\.pt$",
+                    "exists": true
+                },
+                "reference_model_type": {
+                    "type": "string",
+                    "default": "scvi",
+                    "description": "Specify the type of model provided in the `reference_model` parameter",
+                    "help_text": "Can be either 'scvi' or 'scanvi'.",
+                    "pattern": "^(scvi|scanvi)$"
+                }
+            }
+        },
         "pipeline_options": {
             "title": "Pipeline options",
             "type": "object",
             "description": "Options for selecting which tools should be used for certain tasks",
             "properties": {
+                "preprocess_only": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Only run the preprocessing steps, skip the integration and clustering steps"
+                },
                 "memory_scale": {
                     "type": "integer",
                     "default": 1,
@@ -85,7 +132,7 @@
                     "default": "scvi",
                     "description": "Specify the tool to use for integration",
                     "help_text": "If you want to use multiple tools, separate them with a comma. Available methods are: scvi, scanvi, harmony, bbknn, combat, seurat",
-                    "pattern": "^((scvi|scanvi|harmony|bbknn|combat|seurat)?,?)*[^,]+$"
+                    "pattern": "^((scvi|scanvi|harmony|bbknn|combat|seurat)(,(scvi|scanvi|harmony|bbknn|combat|seurat))*)?$"
                 },
                 "integration_hvgs": {
                     "type": "integer",
@@ -99,6 +146,21 @@
                     "description": "Specify the resolutions for clustering",
                     "help_text": "Specify the resolutions for clustering. If you want to use multiple resolutions, separate them with a comma.",
                     "pattern": "^((\\d+\\.?\\d+)?,?)*[^,]+$"
+                },
+                "cluster_per_label": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Create a UMAP and a clustering for each unique value in the label column (and for each integration method)"
+                },
+                "cluster_global": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Create a global UMAP and clustering (for each integration method)"
+                },
+                "skip_rankgenesgroups": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip the rank_genes_groups step. For large datasets, the pipeline might fail due to high memory usage in this step. Use this option to skip it."
                 },
                 "celltypist_model": {
                     "type": "string",
@@ -124,29 +186,6 @@
                     "default": false,
                     "description": "Use GPU acceleration for tasks that support it",
                     "hidden": true
-                },
-                "base_adata": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "If you want to project new data onto an already integrated object, specify the path to the base AnnData object here",
-                    "help_text": "The file should be in the .h5ad format. If specified, make sure to also provide the `reference_model` parameter. If provided, only `scvi` and `scanvi` are available as integration methods.",
-                    "pattern": "^\\S+\\.h5ad$",
-                    "exists": true
-                },
-                "reference_model": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "If you want to use a pre-trained scVI/scANVI model as a reference for integration, specify the path to the model `.pt` file here",
-                    "help_text": "The file should be in the .pt format.",
-                    "pattern": "^\\S+\\.pt$",
-                    "exists": true
-                },
-                "reference_model_type": {
-                    "type": "string",
-                    "default": "scvi",
-                    "description": "Specify the type of model provided in the `reference_model` parameter",
-                    "help_text": "Can be either 'scvi' or 'scanvi'.",
-                    "pattern": "^(scvi|scanvi)$"
                 },
                 "prep_cellxgene": {
                     "type": "boolean",
@@ -223,41 +262,6 @@
                 }
             }
         },
-        "max_job_request_options": {
-            "title": "Max job request options",
-            "type": "object",
-            "fa_icon": "fab fa-acquisitions-incorporated",
-            "description": "Set the top limit for requested resources for any single job.",
-            "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
-            "properties": {
-                "max_cpus": {
-                    "type": "integer",
-                    "description": "Maximum number of CPUs that can be requested for any single job.",
-                    "default": 16,
-                    "fa_icon": "fas fa-microchip",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
-                },
-                "max_memory": {
-                    "type": "string",
-                    "description": "Maximum amount of memory that can be requested for any single job.",
-                    "default": "128.GB",
-                    "fa_icon": "fas fa-memory",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
-                },
-                "max_time": {
-                    "type": "string",
-                    "description": "Maximum amount of time that can be requested for any single job.",
-                    "default": "240.h",
-                    "fa_icon": "far fa-clock",
-                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
-                }
-            }
-        },
         "generic_options": {
             "title": "Generic options",
             "type": "object",
@@ -265,12 +269,6 @@
             "description": "Less common options for the pipeline, typically set in a config file.",
             "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
             "properties": {
-                "help": {
-                    "type": "boolean",
-                    "description": "Display help text.",
-                    "fa_icon": "fas fa-question-circle",
-                    "hidden": true
-                },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
@@ -360,27 +358,6 @@
                     "fa_icon": "fas fa-check-square",
                     "hidden": true
                 },
-                "validationShowHiddenParams": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-eye-slash",
-                    "description": "Show all params when using `--help`",
-                    "hidden": true,
-                    "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
-                },
-                "validationFailUnrecognisedParams": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-check-circle",
-                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
-                    "hidden": true,
-                    "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
-                },
-                "validationLenientMode": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-check-circle",
-                    "description": "Validation of parameters in lenient more.",
-                    "hidden": true,
-                    "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
-                },
                 "pipelines_testdata_base_path": {
                     "type": "string",
                     "fa_icon": "far fa-check-circle",
@@ -393,19 +370,23 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/input_output_options"
+            "$ref": "#/$defs/input_output_options"
+        },
+
+        {
+            "$ref": "#/$defs/institutional_config_options"
         },
         {
-            "$ref": "#/definitions/pipeline_options"
+            "$ref": "#/$defs/reference_mapping_options"
         },
         {
-            "$ref": "#/definitions/institutional_config_options"
+            "$ref": "#/$defs/pipeline_options"
         },
         {
-            "$ref": "#/definitions/max_job_request_options"
+            "$ref": "#/$defs/institutional_config_options"
         },
         {
-            "$ref": "#/definitions/generic_options"
+            "$ref": "#/$defs/generic_options"
         }
     ]
 }

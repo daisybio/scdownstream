@@ -1,6 +1,6 @@
-process SCANPY_FILTER {
+process ADATA_SPLITEMBEDDINGS {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -9,6 +9,7 @@ process SCANPY_FILTER {
 
     input:
     tuple val(meta), path(h5ad)
+    val(embeddings)
 
     output:
     tuple val(meta), path("*.h5ad"), emit: h5ad
@@ -18,11 +19,6 @@ process SCANPY_FILTER {
     task.ext.when == null || task.ext.when
 
     script:
-    min_genes       = meta.min_genes ?: 1
-    min_cells       = meta.min_cells ?: 1
-    min_counts_gene = meta.min_counts_gene ?: 1
-    min_counts_cell = meta.min_counts_cell ?: 1
-    max_mito_fraction   = meta.max_mito_fraction ?: 100
     prefix = task.ext.prefix ?: "${meta.id}"
-    template 'filter.py'
+    template 'split_embeddings.py'
 }

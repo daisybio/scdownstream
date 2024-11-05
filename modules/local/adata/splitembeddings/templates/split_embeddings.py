@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-import scanpy as sc
 import platform
-from threadpoolctl import threadpool_limits
-threadpool_limits(int("${task.cpus}"))
-sc.settings.n_jobs = int("${task.cpus}")
+
+import pandas as pd
+import anndata as ad
 
 def format_yaml_like(data: dict, indent: int = 0) -> str:
     """Formats a dictionary to a YAML-like string.
@@ -25,30 +24,26 @@ def format_yaml_like(data: dict, indent: int = 0) -> str:
             yaml_str += f"{spaces}{key}: {value}\\n"
     return yaml_str
 
+adata = ad.read_h5ad("${h5ad}")
+embeddings = "${embeddings.join(' ')}".split()
 
-adata = sc.read_h5ad("${h5ad}")
-prefix = "${prefix}"
+assert len(embeddings) > 0, "No embeddings to split."
+for embedding in embeddings:
+    assert f"X_{embedding}" in adata.obsm, f"Embedding {embedding} not found in adata."
 
-adata.var["mt"] = adata.var_names.str.startswith(("MT-", "mt-"))
-sc.pp.calculate_qc_metrics(
-    adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
-)
-adata = adata[adata.obs.pct_counts_mt < int("${max_mito_fraction}"), :].copy()
+obsm = adata.obsm
+adata.obsm = {}
 
-sc.pp.filter_cells(adata, min_counts=int("${min_counts_cell}"))
-sc.pp.filter_genes(adata, min_counts=int("${min_counts_gene}"))
-
-sc.pp.filter_cells(adata, min_genes=int("${min_genes}"))
-sc.pp.filter_genes(adata, min_cells=int("${min_cells}"))
-
-adata.write_h5ad(f"{prefix}.h5ad")
+for embedding in embeddings:
+    adata.obsm["X_emb"] = obsm[f"X_{embedding}"]
+    adata.write_h5ad(f"{embedding}.h5ad")
 
 # Versions
 
 versions = {
     "${task.process}": {
         "python": platform.python_version(),
-        "scanpy": sc.__version__
+        "anndata": ad.__version__
     }
 }
 

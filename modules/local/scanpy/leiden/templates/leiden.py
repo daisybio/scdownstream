@@ -63,7 +63,7 @@ adata.write_h5ad(f"{prefix}.h5ad")
 # Plot
 sc.pl.umap(adata, title="${meta.id} Leiden", color=prefix, show=False)
 path = f"{prefix}.png"
-plt.savefig(path)
+plt.savefig(path, bbox_inches='tight')
 
 # MultiQC
 with open(path, "rb") as f_plot, open("${prefix}_mqc.json", "w") as f_json:

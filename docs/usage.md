@@ -46,20 +46,21 @@ sample3,/absolute/path/to/sample3_filtered.csv,/absolute/path/to/sample3.csv,,,,
 
 For CSV input files, specifying the `batch_col`, `label_col`, and `unknown_label` columns will not have any effect, as no additional metadata is available in the CSV file.
 
-| Column            | Description                                                                                                                                                                                                                                                                                                                                                                                                          |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`          | Unique sample identifier. Will be added to the pipeline output objects as `sample` column.                                                                                                                                                                                                                                                                                                                           |
-| `filtered`        | May contain paths to `h5ad`, `h5`, `rds`, or `csv` files. `rds` files may contain any object that can be converted to a `SingleCellExperiment` using the [Seurat `as.SingleCellExperiment`](https://satijalab.org/seurat/reference/as.singlecellexperiment) function. `csv` files should contain a matrix with genes as columns and cells as rows.                                                                   |
-| `unfiltered`      | Same as `file`, but for the unfiltered cellranger or nf-core/scrnaseq output. If not provided, only `decontX` can be used for ambient RNA removal.                                                                                                                                                                                                                                                                   |
-| `batch_col`       | Column in the input file containing batch information. Defaults to `batch`. If the column does not exist in the input object, the pipeline will create a new column and put the sample identifier in it. If the `batch_col` is something else than `batch`, it will be renamed to `batch` during pipeline execution.                                                                                                 |
-| `symbol_col`      | Column in the input file containing gene symbol information. Defaults to `index`. There are two special values that can be used: `index` and `none`. `index` will use the row names of the matrix as gene symbols. `none` will trigger the pipeline to perform gene symbol conversion (this is not supported yet). The values from `symbol_col` will be copied to a column `gene_symbols` during pipeline execution. |
-| `label_col`       | Column in the input file containing cell type information. Defaults to `label`. If the column does not exist in the input object, the pipeline will create a new column and put `unknown` in it. If the `label_col` is something else than `label`, it will be renamed to `label` during pipeline execution.                                                                                                         |
-| `unknown_label`   | Value in the `label_col` column that should be considered as unknown. Defaults to `unknown`. If the `unknown_label` is something else than `unknown`, it will be renamed to `unknown` during pipeline execution. If trying to perform integration with scANVI, more than one unique label other than `unknown` must exist in the input data.                                                                         |
-| `min_genes`       | Minimum number of genes required for a cell to be considered. Defaults to `1`.                                                                                                                                                                                                                                                                                                                                       |
-| `min_cells`       | Minimum number of cells required for a gene to be considered. Defaults to `1`.                                                                                                                                                                                                                                                                                                                                       |
-| `min_counts_cell` | Minimum number of counts required for a cell to be considered. Defaults to `1`.                                                                                                                                                                                                                                                                                                                                      |
-| `min_counts_gene` | Minimum number of counts required for a gene to be considered. Defaults to `1`.                                                                                                                                                                                                                                                                                                                                      |
-| `expected_cells`  | Number of expected cells, used as input to Cellbender.                                                                                                                                                                                                                                                                                                                                                               |
+| Column              | Description                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`            | Unique sample identifier. Will be added to the pipeline output objects as `sample` column.                                                                                                                                                                                                                                                                                                                           |
+| `filtered`          | May contain paths to `h5ad`, `h5`, `rds`, or `csv` files. `rds` files may contain any object that can be converted to a `SingleCellExperiment` using the [Seurat `as.SingleCellExperiment`](https://satijalab.org/seurat/reference/as.singlecellexperiment) function. `csv` files should contain a matrix with genes as columns and cells as rows.                                                                   |
+| `unfiltered`        | Same as `filtered`, but for the unfiltered cellranger or nf-core/scrnaseq output. If not provided, only `decontX` can be used for ambient RNA removal.                                                                                                                                                                                                                                                               |
+| `batch_col`         | Column in the input file containing batch information. Defaults to `batch`. If the column does not exist in the input object, the pipeline will create a new column and put the sample identifier in it. If the `batch_col` is something else than `batch`, it will be renamed to `batch` during pipeline execution.                                                                                                 |
+| `symbol_col`        | Column in the input file containing gene symbol information. Defaults to `index`. There are two special values that can be used: `index` and `none`. `index` will use the row names of the matrix as gene symbols. `none` will trigger the pipeline to perform gene symbol conversion (this is not supported yet). The values from `symbol_col` will be copied to a column `gene_symbols` during pipeline execution. |
+| `label_col`         | Column in the input file containing cell type information. Defaults to `label`. If the column does not exist in the input object, the pipeline will create a new column and put `unknown` in it. If the `label_col` is something else than `label`, it will be renamed to `label` during pipeline execution.                                                                                                         |
+| `unknown_label`     | Value in the `label_col` column that should be considered as unknown. Defaults to `unknown`. If the `unknown_label` is something else than `unknown`, it will be renamed to `unknown` during pipeline execution. If trying to perform integration with scANVI, more than one unique label other than `unknown` must exist in the input data.                                                                         |
+| `min_genes`         | Minimum number of genes required for a cell to be considered. Defaults to `1`.                                                                                                                                                                                                                                                                                                                                       |
+| `min_cells`         | Minimum number of cells required for a gene to be considered. Defaults to `1`.                                                                                                                                                                                                                                                                                                                                       |
+| `min_counts_cell`   | Minimum number of counts required for a cell to be considered. Defaults to `1`.                                                                                                                                                                                                                                                                                                                                      |
+| `min_counts_gene`   | Minimum number of counts required for a gene to be considered. Defaults to `1`.                                                                                                                                                                                                                                                                                                                                      |
+| `expected_cells`    | Number of expected cells, used as input to Cellbender.                                                                                                                                                                                                                                                                                                                                                               |
+| `max_mito_fraction` | Maximum fraction of mitochondrial reads for a cell to be considered. Defaults to `100`.                                                                                                                                                                                                                                                                                                                              |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
@@ -96,9 +97,9 @@ The above pipeline run specified with a params file in yaml format:
 nextflow run nf-core/scdownstream -profile docker -params-file params.yaml
 ```
 
-with `params.yaml` containing:
+with:
 
-```yaml
+```yaml title="params.yaml"
 input: './samplesheet.csv'
 outdir: './results/'
 genome: 'GRCh37'
@@ -106,6 +107,10 @@ genome: 'GRCh37'
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
+### Cell type annotation
+
+Automated cell type annotation using [Celltypist](https://github.com/Teichlab/celltypist) is supported. You can specify the models to use with the [`celltypist_model` parameter](https://nf-co.re/scdownstream/dev/parameters/#celltypist_model). If no models are specified, no cell type annotation will be performed.
 
 ### Reference mapping
 
@@ -122,6 +127,16 @@ The following scenarious can be distinguished:
 - **You have a reference scVI/scANVI model as well as an output AnnData file from a previous run of the pipeline and you want to add more samples to the existing AnnData file.** In this case, you need to provide the path to the reference model via the `reference_model` parameter and set the `reference_model_type` parameter to either `scvi` or `scanvi`, depending on the type of the reference model. If an scANVI model is used, existing cell type annotations will be transferred to the new samples. The existing AnnData file should be provided via the `base_adata` parameter.
 
 The pipeline will perform the preprocessing steps on the new samples as usual. During the integration step, the new samples will be mapped onto the latent space of the reference model. If `base_adata` is provided, the new samples will then be aggregated onto the base file. The clustering, dimensionality reduction etc. will then be performed on the integrated object.
+
+### Skipping integration
+
+:::tip
+This can be useful if you have assigned cell type annotations to the integrated object and want to perform further analysis based on these annotations.
+:::
+
+If you want to run tasks after the integration step without performing integration, you can provide a previous result of the pipeline as the `base_adata` parameter. You do not need to provide a samplesheet via the `input` parameter in this case. In order to let the pipeline know which integration embeddings should be used, you need to provide the `base_embeddings` parameter. If you stored the labels (e.g. cell type annotations) in a column other than `label`, you can provide the column name via the `base_label_col` parameter.
+
+The pipeline will then re-execute the tasks after the integration step without performing integration again. Most interestingly, the pipeline will generate cell type specific UMAPs, clusterings, and PAGA graphs, if the `clustering_per_label` parameter is set to `true`.
 
 ### GPU acceleration
 
@@ -286,14 +301,6 @@ In most cases, you will only need to create a custom config as a one-off but if 
 See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for more information about creating your own configuration files.
 
 If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
-
-## Azure Resource Requests
-
-To be used with the `azurebatch` profile by specifying the `-profile azurebatch`.
-We recommend providing a compute `params.vm_type` of `Standard_D16_v3` VMs by default but these options can be changed if required.
-
-Note that the choice of VM size depends on your quota and the overall workload during the analysis.
-For a thorough list, please refer the [Azure Sizes for virtual machines in Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes).
 
 ## Running in the background
 

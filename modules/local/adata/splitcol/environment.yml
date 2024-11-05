@@ -1,5 +1,6 @@
+name: adata_splitcol
 channels:
   - conda-forge
   - bioconda
 dependencies:
-  - bioconda::multiqc=1.25.1
+  - conda-forge::anndata=0.10.7
