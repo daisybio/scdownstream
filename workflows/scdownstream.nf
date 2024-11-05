@@ -102,11 +102,14 @@ workflow SCDOWNSTREAM {
         ch_uns = ch_uns.mix(CLUSTER.out.uns)
         ch_multiqc_files = ch_multiqc_files.mix(CLUSTER.out.multiqc_files)
 
-        GRN(ch_integrations)
-        ch_versions = ch_versions.mix(GRN.out.versions)
-
         FINALIZE(ch_finalization_base, ch_obs, ch_obsm, ch_obsp, ch_uns, ch_layers)
         ch_versions = ch_versions.mix(FINALIZE.out.versions)
+    }
+
+    // Perform GRN Analysis
+    if (!params.preprocess_only && params.split_config) {
+        GRN(ch_finalization_base)
+        ch_versions = ch_versions.mix(GRN.out.versions)
     }
 
     //
