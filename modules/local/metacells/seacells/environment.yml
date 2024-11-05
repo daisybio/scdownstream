@@ -1,0 +1,9 @@
+name: seacells
+channels:
+- conda-forge
+- bioconda
+dependencies:
+- bioconda::seacells=0.3.3
+- conda-forge::ipywidgets=8.1.5
+- conda-forge::scanpy=1.10.3
+- conda-forge::tqdm=4.66.5

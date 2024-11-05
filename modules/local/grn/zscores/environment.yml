@@ -1,0 +1,10 @@
+name: zscores
+channels:
+- conda-forge
+- bioconda
+dependencies:
+- bioconda::bioconductor-dcanr=1.18.0
+- bioconda::bioconductor-singlecellexperiment=1.24.0
+- conda-forge::r-igraph=2.0.3
+- conda-forge::r-seurat=5.1.0
+- conda-forge::r-tidyverse=2.0.0

@@ -1,0 +1,11 @@
+channels:
+- conda-forge
+- bioconda
+dependencies:
+- conda-forge::python_abi=3.10
+- pip
+- pip:
+  - arboreto==0.1.6
+  - dask-expr==0.5.3
+  - distributed==2024.2.1
+  - scanpy==1.10.1

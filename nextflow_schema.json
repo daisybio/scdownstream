@@ -154,6 +154,18 @@
                     "description": "Prepare the output for visualisation in cellxgene",
                     "fa_icon": "fas fa-chart-line"
                 },
+                "metacell_method": {
+                    "type": "string",
+                    "default": "seacells",
+                    "description": "Specify the method to use for metacell creation",
+                    "help_text": "Only one method can be chosen. Available methods are: seacells",
+                    "pattern": "^(seacells)$"
+                },
+                "n_seacells_per_group": {
+                    "type": "integer",
+                    "default": 90,
+                    "description": "Number of cells per seacell."
+                },
                 "grn_methods": {
                     "type": "string",
                     "default": "none",
@@ -307,6 +319,20 @@
                     "description": "Incoming hook URL for messaging service",
                     "fa_icon": "fas fa-people-group",
                     "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
+                    "hidden": true
+                },
+                "split_config": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Custom config file to supply to grn/differential expression analysis.",
+                    "fa_icon": "fas fa-cog",
+                    "hidden": true
+                },
+                "grn_tflist": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Custom transcription factor (tf) file to supply to grn/differential expression analysis.",
+                    "fa_icon": "fas fa-cog",
                     "hidden": true
                 },
                 "multiqc_config": {

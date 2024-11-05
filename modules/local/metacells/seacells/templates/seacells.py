@@ -40,11 +40,10 @@ def format_yaml_like(data: dict, indent: int = 0) -> str:
 def read_config(path):
     with open(path) as handle:
         config = json.load(handle)
-    return config
+    return config, path[:-5]
 
 def experiment_id_and_subconfig(config):
-    key = list(config.keys())[0]
-    return key, config[key]
+    return config['key'], config['value']
 
 def run_standard_pp(adata):
     # Copy the counts to ".raw" attribute of the anndata since it is necessary for downstream analysis
@@ -83,7 +82,6 @@ def subset_adata(adata, dataset_config):
     return sub
 
 def create_all_adata_subsets(adata, subconfig):
-
     dict_of_datasets = {}
     for k in list(subconfig.keys()):
         dict_of_datasets[k] = subset_adata(adata, subconfig[k])
@@ -95,26 +93,32 @@ def compute_seacells(adata, n_SEACells, build_kernel_on, **kwargs):
     print(n_SEACells)
     # Run standard preprocesseing
     adata = run_standard_pp(adata)
-    model = SEACells.core.SEACells(adata, n_SEACells=n_SEACells, build_kernel_on=build_kernel_on, **kwargs)
+    model = SEACells.core.SEACells(
+        adata, 
+        n_SEACells=n_SEACells, 
+        build_kernel_on=build_kernel_on, 
+        n_waypoint_eigs=kwargs['n_waypoint_eigs'],
+        convergence_epsilon=kwargs['convergence_epsilon']
+    )
     
     model.construct_kernel_matrix()
-    M = model.kernel_matrix
+    # M = model.kernel_matrix
     
     # Initialize archetypes
     model.initialize_archetypes()
     
-    model.fit(min_iter=10, max_iter=max_iterations)
+    model.fit(min_iter=10, max_iter=kwargs['max_iterations'])
     converged = model.RSS_iters[-2]-model.RSS_iters[-1]<model.convergence_threshold
     SEACell_ad = SEACells.core.summarize_by_SEACell(adata, SEACells_label='SEACell', summarize_layer='raw')
 
     if not converged:
-        print(f'Warning: SEACells did not converge after {max_iterations} iterations')
+        print(f'Warning: SEACells did not converge after {kwargs['max_iterations']} iterations')
     
     return adata, SEACell_ad
     
 
 
-def run_seacells_on_all(dict_of_adata, tracer, n_SEACells, build_kernel_on, **kwargs):
+def run_seacells_on_all(config_id, dict_of_adata, tracer, n_SEACells, build_kernel_on, **kwargs):
     
     print(n_SEACells)
     list_of_colnames = []
@@ -122,8 +126,7 @@ def run_seacells_on_all(dict_of_adata, tracer, n_SEACells, build_kernel_on, **kw
         # Run seacells
         sub, SEACell_ad = compute_seacells(dict_of_adata[key], n_SEACells, build_kernel_on,  **kwargs)
 
-        SEACell_ad.write_h5ad(f"{key}_sub.h5ad")
-
+        SEACell_ad.write_h5ad(f"{config_id}_{key}_seacell.h5ad")
 
         # Create object to trace back the origin of the metacell
         tracer = pd.merge(tracer, sub.obs.SEACell, left_index=True, right_index=True, how='left')
@@ -136,16 +139,15 @@ def run_seacells_on_all(dict_of_adata, tracer, n_SEACells, build_kernel_on, **kw
 
 ### PRPOCESS PARAMETERS ###
 n_SEACells =  "${params.n_seacells_per_group}"
+print(n_SEACells)
 build_kernel_on = 'X_pca'
 
 arg_dict = {'n_waypoint_eigs': int("${n_waypoint_eigs}"),
-           'max_iteration': int("${max_iteration}"),
+           'max_iterations': int("${max_iterations}"),
            'convergence_epsilon': float("${convergence_epsilon}")}
 
-           
-config = read_config("${json}")
+config, config_id = read_config("${json}")
 key, subconfig = experiment_id_and_subconfig(config)
-
 
 adata = sc.read_h5ad("${h5ad}")
 prefix = "${prefix}"
@@ -158,7 +160,9 @@ dict_of_adata = create_all_adata_subsets(adata, subconfig)
 ## create the anndata subdata sets
 ## This saves the data
 tracer = pd.DataFrame(index = adata.obs.index)
-tracer = run_seacells_on_all(dict_of_adata, tracer, n_SEACells=n_SEACells, build_kernel_on=build_kernel_on)
+print(tracer)
+print(dict_of_adata)
+tracer = run_seacells_on_all(config_id, dict_of_adata, tracer, n_SEACells=n_SEACells, build_kernel_on=build_kernel_on, **arg_dict)
 
 
 # add the metacell information to the adata object
