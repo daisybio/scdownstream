@@ -134,7 +134,7 @@ adata.obs["label"] = adata.obs["label"].astype("category")
 symbol_col = "${meta.symbol_col ?: 'index'}"
 unify_gene_symbols = "${unify_gene_symbols}" == "true"
 
-if symbol_col != "index" and symbol_col != "none":
+if symbol_col not in ["index", "none"]:
     adata.var.index = adata.var[symbol_col]
     del adata.var[symbol_col]
 
