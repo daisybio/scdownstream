@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 
-import scanpy as sc
+import os
 import platform
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+
+import scanpy as sc
 from threadpoolctl import threadpool_limits
 threadpool_limits(int("${task.cpus}"))
 sc.settings.n_jobs = int("${task.cpus}")

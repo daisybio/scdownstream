@@ -1,12 +1,16 @@
 #!/opt/conda/bin/python
 
+import os
+import platform
+import base64
+import json
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+
 import scanpy as sc
 import matplotlib.pyplot as plt
 import upsetplot
 import matplotlib
-import platform
-import base64
-import json
 
 def format_yaml_like(data: dict, indent: int = 0) -> str:
     """Formats a dictionary to a YAML-like string.

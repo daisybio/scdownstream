@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+import os
 import json
 import platform
 import base64
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
 
 import scanpy as sc
 import pandas as pd

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import os
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+
 import scanpy as sc
 import matplotlib
 import matplotlib.pyplot as plt

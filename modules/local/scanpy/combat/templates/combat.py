@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 
+import os
+import platform
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+
 import scanpy as sc
 import pandas as pd
 import numpy as np
-import platform
 
 from threadpoolctl import threadpool_limits
 threadpool_limits(int("${task.cpus}"))

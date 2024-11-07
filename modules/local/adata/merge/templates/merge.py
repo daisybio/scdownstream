@@ -4,6 +4,8 @@ import os
 import platform
 from collections import defaultdict
 
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+
 import numpy as np
 import scipy
 from scipy.sparse import csr_matrix
