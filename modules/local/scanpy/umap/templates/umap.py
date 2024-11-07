@@ -40,6 +40,8 @@ prefix = "${prefix}"
 use_gpu = "${task.ext.use_gpu}" == "true"
 
 if use_gpu:
+    os.environ["CUPY_CACHE_DIR"] = "./tmp/cupy"
+
     import rapids_singlecell as rsc
     import rmm
     from rmm.allocators.cupy import rmm_cupy_allocator
