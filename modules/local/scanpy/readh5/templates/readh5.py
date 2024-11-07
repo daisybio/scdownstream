@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
+import os
 import platform
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+
 import scanpy as sc
 import pandas as pd
 

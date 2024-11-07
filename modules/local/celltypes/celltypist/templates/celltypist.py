@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
+import os
 import platform
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+os.environ["CELLTYPIST_FOLDER"] = "./tmp/celltypist"
 
 import pandas as pd
 import scanpy as sc
