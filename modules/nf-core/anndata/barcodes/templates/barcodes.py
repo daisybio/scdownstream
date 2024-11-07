@@ -3,8 +3,7 @@
 import platform
 
 import anndata as ad
-import cellbender
-from cellbender.remove_background.downstream import load_anndata_from_input_and_output
+import pandas as pd
 
 
 def format_yaml_like(data: dict, indent: int = 0) -> str:
@@ -19,7 +18,7 @@ def format_yaml_like(data: dict, indent: int = 0) -> str:
     """
     yaml_str = ""
     for key, value in data.items():
-        spaces = "  " * indent
+        spaces = "    " * indent
         if isinstance(value, dict):
             yaml_str += f"{spaces}{key}:\\n{format_yaml_like(value, indent + 1)}"
         else:
@@ -27,27 +26,17 @@ def format_yaml_like(data: dict, indent: int = 0) -> str:
     return yaml_str
 
 
-adata = ad.read_h5ad("${filtered}")
+df = pd.read_csv("${barcodes}", header=None)
+adata = ad.read_h5ad("${h5ad}")
 
-adata_cellbender = load_anndata_from_input_and_output("${unfiltered}", "${cellbender_h5}", analyzed_barcodes_only=False)
-
-adata_cellbender = adata_cellbender[adata.obs_names]
-
-if "${output_layer}" == "X":
-    adata.X = adata_cellbender.layers["cellbender"]
-else:
-    adata.layers["${output_layer}"] = adata_cellbender.layers["cellbender"]
+adata = adata[df[0].values]
 
 adata.write_h5ad("${prefix}.h5ad")
 
 # Versions
 
 versions = {
-    "${task.process}": {
-        "python": platform.python_version(),
-        "cellbender": cellbender.__version__,
-        "anndata": ad.__version__,
-    }
+    "${task.process}": {"python": platform.python_version(), "anndata": ad.__version__, "pandas": pd.__version__}
 }
 
 with open("versions.yml", "w") as f:

@@ -1,7 +1,7 @@
 include { ADATA_TORDS      } from '../../modules/local/adata/tords'
-include { SCVITOOLS_SOLO   } from '../../modules/local/scvitools/solo'
+include { SCVITOOLS_SOLO   } from '../../modules/nf-core/scvitools/solo'
 include { SCANPY_SCRUBLET  } from '../../modules/local/scanpy/scrublet'
-include { DOUBLETDETECTION } from '../../modules/local/doublet_detection/doubletdetection'
+include { DOUBLETDETECTION } from '../../modules/nf-core/doublet_detection/doubletdetection'
 include { SCDS             } from '../../modules/local/doublet_detection/scds'
 include { DOUBLET_REMOVAL  } from '../../modules/local/doublet_detection/doublet_removal'
 
