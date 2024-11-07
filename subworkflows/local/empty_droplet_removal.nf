@@ -1,5 +1,5 @@
 include { CELLBENDER_REMOVEBACKGROUND } from '../../modules/nf-core/cellbender/removebackground'
-include { ADATA_BARCODES              } from '../../modules/local/adata/barcodes'
+include { ANNDATA_BARCODES            } from '../../modules/nf-core/anndata/barcodes'
 
 workflow EMPTY_DROPLET_REMOVAL {
     take:
@@ -13,10 +13,10 @@ workflow EMPTY_DROPLET_REMOVAL {
 
     ch_combined = ch_unfiltered.join(CELLBENDER_REMOVEBACKGROUND.out.barcodes)
 
-    ADATA_BARCODES(ch_combined)
-    ch_versions = ch_versions.mix(ADATA_BARCODES.out.versions)
+    ANNDATA_BARCODES(ch_combined)
+    ch_versions = ch_versions.mix(ANNDATA_BARCODES.out.versions)
 
-    ch_h5ad = ADATA_BARCODES.out.h5ad
+    ch_h5ad = ANNDATA_BARCODES.out.h5ad
 
     emit:
     h5ad = ch_h5ad

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
-# Set numba cache to /tmp
-# This is not an ideal solution
 import os
-os.environ["NUMBA_CACHE_DIR"] = "/tmp"
+import platform
+
+os.environ["MPLCONFIGDIR"] = "./tmp"
+os.environ["NUMBA_CACHE_DIR"] = "./tmp"
 
 import anndata as ad
 import doubletdetection
-import platform
+
 
 def format_yaml_like(data: dict, indent: int = 0) -> str:
     """Formats a dictionary to a YAML-like string.
@@ -21,12 +22,13 @@ def format_yaml_like(data: dict, indent: int = 0) -> str:
     """
     yaml_str = ""
     for key, value in data.items():
-        spaces = "  " * indent
+        spaces = "    " * indent
         if isinstance(value, dict):
             yaml_str += f"{spaces}{key}:\\n{format_yaml_like(value, indent + 1)}"
         else:
             yaml_str += f"{spaces}{key}: {value}\\n"
     return yaml_str
+
 
 adata = ad.read_h5ad("${h5ad}")
 
@@ -44,7 +46,6 @@ df.columns = ["${prefix}"]
 df.to_pickle("${prefix}.pkl")
 
 # Versions
-
 versions = {
     "${task.process}": {
         "python": platform.python_version(),

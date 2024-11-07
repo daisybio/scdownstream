@@ -2,7 +2,7 @@ include { CELDA_DECONTX               } from '../../modules/local/celda/decontx'
 include { CELLBENDER_REMOVEBACKGROUND } from '../../modules/nf-core/cellbender/removebackground'
 include { CELLBENDER_MERGE            } from '../../modules/nf-core/cellbender/merge'
 include { SOUPX                       } from '../../modules/local/soupx'
-include { SCVITOOLS_SCAR              } from '../../modules/local/scvitools/scar'
+include { SCVITOOLS_SCAR              } from '../../modules/nf-core/scvitools/scar'
 
 workflow AMBIENT_RNA_REMOVAL {
     take:
