@@ -150,7 +150,7 @@
                     "default": "0.5,1.0",
                     "description": "Specify the resolutions for clustering",
                     "help_text": "Specify the resolutions for clustering. If you want to use multiple resolutions, separate them with a comma.",
-                    "pattern": "^((\\d+\\.?\\d+)?,?)*[^,]+$"
+                    "pattern": "^\\d+(\\.\\d+)?(,\\d+(\\.\\d+)?)*$"
                 },
                 "cluster_per_label": {
                     "type": "boolean",
