@@ -1,7 +1,7 @@
 process SCANPY_LEIDEN {
     tag "$meta.id"
     label 'process_medium'
-    label 'process_gpu'
+    // label 'process_gpu' Issue: https://github.com/scverse/rapids_singlecell/issues/286
 
     conda "${moduleDir}/environment.yml"
     container "${ task.ext.use_gpu ? 'ghcr.io/scverse/rapids_singlecell:v0.10.8' :
