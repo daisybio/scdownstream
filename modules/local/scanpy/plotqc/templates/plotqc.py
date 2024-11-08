@@ -3,6 +3,7 @@
 import os
 
 os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+os.environ["MPLCONFIGDIR"] = "./tmp/matplotlib"
 
 import scanpy as sc
 import matplotlib

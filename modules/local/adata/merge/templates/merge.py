@@ -5,6 +5,7 @@ import platform
 from collections import defaultdict
 
 os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+os.environ["MPLCONFIGDIR"] = "./tmp/matplotlib"
 
 import numpy as np
 import scipy
@@ -58,9 +59,12 @@ column_defaults = {}
 
 for column, dtypes in column_dtypes.items():
     if len(dtypes) > 1:
-        raise ValueError(f"Column {column} has multiple dtypes: {dtypes}")
-
-    column_defaults[column] = np.nan if dtypes.pop() == "number" else "unknown"
+        for adata in adatas:
+            if column in adata.obs.columns:
+                adata.obs[column] = adata.obs[column].astype("object")
+        column_defaults[column] = "unknown"
+    else:
+        column_defaults[column] = np.nan if dtypes.pop() == "number" else "unknown"
 
 for adata in adatas:
     for col in set(obs_col_intersection).difference(adata.obs.columns):
@@ -69,10 +73,6 @@ for adata in adatas:
 
 adata_outer = ad.concat(adatas, join="outer")
 adata_outer.X = csr_matrix(adata_outer.X)
-
-# Make sure there are no cells and genes without any counts
-sc.pp.filter_cells(adata_outer, min_counts=1)
-sc.pp.filter_genes(adata_outer, min_cells=1)
 
 genes_intersection = list(set(adata_outer.var_names).intersection(*genes))
 sorted(genes_intersection)
