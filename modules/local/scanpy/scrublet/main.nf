@@ -22,5 +22,6 @@ process SCANPY_SCRUBLET {
 
     script:
     prefix = task.ext.prefix ?: "${meta.id}"
+    batch_col = task.ext.batch_col ?: "batch"
     template 'scrublet.py'
 }

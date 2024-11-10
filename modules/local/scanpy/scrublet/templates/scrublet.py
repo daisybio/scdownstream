@@ -33,6 +33,11 @@ def format_yaml_like(data: dict, indent: int = 0) -> str:
 adata = sc.read_h5ad("${h5ad}")
 prefix = "${prefix}"
 use_gpu = "${task.ext.use_gpu}" == "true"
+batch_col = "${batch_col}"
+
+kwargs = {}
+if adata.obs[batch_col].nunique() > 1:
+    kwargs["batch_key"] = batch_col
 
 if use_gpu:
     os.environ["CUPY_CACHE_DIR"] = "./tmp/cupy"
@@ -49,11 +54,12 @@ if use_gpu:
     cp.cuda.set_allocator(rmm_cupy_allocator)
 
     rsc.get.anndata_to_GPU(adata)
-    rsc.pp.scrublet(adata, batch_key="batch")
+    rsc.pp.scrublet(adata, **kwargs)
     rsc.get.anndata_to_CPU(adata)
 else:
-    sc.pp.scrublet(adata, batch_key="batch")
+    sc.pp.scrublet(adata, **kwargs)
 
+adata.obs["predicted_doublet"] = adata.obs["predicted_doublet"].astype(bool)
 df = adata.obs[["predicted_doublet"]]
 df.columns = ["${prefix}"]
 df.to_pickle("${prefix}.pkl")
