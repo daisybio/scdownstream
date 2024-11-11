@@ -2,9 +2,6 @@
 
 import os
 import platform
-import json
-import base64
-import pickle
 
 os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
 os.environ["MPLCONFIGDIR"] = "./tmp/matplotlib"
