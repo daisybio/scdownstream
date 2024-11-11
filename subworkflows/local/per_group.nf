@@ -1,5 +1,6 @@
 include { SCANPY_PAGA            } from '../../modules/local/scanpy/paga'
 include { SCANPY_RANKGENESGROUPS } from '../../modules/local/scanpy/rankgenesgroups'
+include { LIANA_RANKAGGREGATE    } from '../../modules/local/liana/rankaggregate'
 
 workflow PER_GROUP {
     take:
@@ -20,6 +21,10 @@ workflow PER_GROUP {
     // ch_obsp       = ch_obsp.mix(SCANPY_PAGA.out.obsp)
     ch_uns           = ch_uns.mix(SCANPY_PAGA.out.uns)
     ch_multiqc_files = ch_multiqc_files.mix(SCANPY_PAGA.out.multiqc_files)
+
+    LIANA_RANKAGGREGATE(ch_no_neighbors)
+    ch_versions      = ch_versions.mix(LIANA_RANKAGGREGATE.out.versions)
+    ch_uns           = ch_uns.mix(LIANA_RANKAGGREGATE.out.uns)
 
     if (!params.skip_rankgenesgroups) {
         SCANPY_RANKGENESGROUPS(ch_no_neighbors)
