@@ -8,6 +8,7 @@ os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
 import scanpy as sc
 import pandas as pd
 import numpy as np
+from scipy.sparse import csr_matrix
 
 from threadpoolctl import threadpool_limits
 threadpool_limits(int("${task.cpus}"))
@@ -37,6 +38,8 @@ adata = sc.read_h5ad("${h5ad}")
 prefix = "${prefix}"
 
 sc.pp.combat(adata, key="batch")
+adata.X = csr_matrix(adata.X)
+
 sc.pp.pca(adata)
 adata.obsm["X_emb"] = adata.obsm["X_pca"]
 

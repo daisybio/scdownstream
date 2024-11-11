@@ -40,7 +40,8 @@ prefix = "${prefix}"
 obs_key = "${obs_key}"
 
 if adata.obs[obs_key].nunique() > 1:
-    sc.pp.log1p(adata)
+    if (adata.X < 0).nnz == 0:
+        sc.pp.log1p(adata)
     li.mt.rank_aggregate(adata, obs_key, use_raw=False, verbose=True)
     df: pd.DataFrame = adata.uns["liana_res"]
 
