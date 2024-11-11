@@ -1,11 +1,11 @@
-process SCANPY_PAGA {
+process LIANA_RANKAGGREGATE {
     tag "$meta.id"
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/python-igraph_scanpy:a7114d55b0af3893':
-        'community.wave.seqera.io/library/python-igraph_scanpy:5f677450e42211ef' }"
+        'https://depot.galaxyproject.org/singularity/liana:1.4.0--pyhdfd78af_0':
+        'biocontainers/liana:1.4.0--pyhdfd78af_0' }"
 
     input:
     tuple val(meta), path(h5ad)
@@ -13,9 +13,6 @@ process SCANPY_PAGA {
     output:
     tuple val(meta), path("*.h5ad"), emit: h5ad, optional: true
     path("*.pkl")                  , emit: uns, optional: true
-    path("*.npy")                  , emit: obsp, optional: true
-    path("*.png")                  , emit: plot, optional: true
-    path("*_mqc.json")             , emit: multiqc_files, optional: true
     path "versions.yml"            , emit: versions
 
     when:
@@ -24,5 +21,5 @@ process SCANPY_PAGA {
     script:
     obs_key = meta.obs_key ?: "leiden"
     prefix = task.ext.prefix ?: "${meta.id}"
-    template 'paga.py'
+    template 'rank_aggregate.py'
 }
