@@ -22,9 +22,11 @@ workflow PER_GROUP {
     ch_uns           = ch_uns.mix(SCANPY_PAGA.out.uns)
     ch_multiqc_files = ch_multiqc_files.mix(SCANPY_PAGA.out.multiqc_files)
 
-    LIANA_RANKAGGREGATE(ch_no_neighbors)
-    ch_versions      = ch_versions.mix(LIANA_RANKAGGREGATE.out.versions)
-    ch_uns           = ch_uns.mix(LIANA_RANKAGGREGATE.out.uns)
+    if (!params.skip_liana) {
+        LIANA_RANKAGGREGATE(ch_no_neighbors)
+        ch_versions      = ch_versions.mix(LIANA_RANKAGGREGATE.out.versions)
+        ch_uns           = ch_uns.mix(LIANA_RANKAGGREGATE.out.uns)
+    }
 
     if (!params.skip_rankgenesgroups) {
         SCANPY_RANKGENESGROUPS(ch_no_neighbors)
