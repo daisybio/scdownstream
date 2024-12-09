@@ -242,7 +242,6 @@
                 },
                 "scvi_max_epochs": {
                     "type": "integer",
-                    "default": null,
                     "description": "Maximum number of epochs for training scVI/scANVI. If not set, a heuristic provided by scVI/scANVI will be used."
                 }
             }
