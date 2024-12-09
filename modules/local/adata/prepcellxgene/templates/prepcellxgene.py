@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 
+import os
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+
 import platform
 import anndata as ad
+import scanpy as sc
 from scipy.sparse import csc_matrix
 import numpy as np
 import scipy as sp
@@ -37,6 +42,7 @@ for integration in integration_methods:
 for layer in adata.layers.keys():
     adata.layers[layer] = csc_matrix(adata.layers[layer]).astype(np.float32)
 adata.X = csc_matrix(adata.X).astype(np.float32)
+sc.pp.log1p(adata)
 
 adata.write_h5ad("${prefix}.h5ad")
 

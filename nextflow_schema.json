@@ -162,6 +162,11 @@
                     "default": true,
                     "description": "Create a global UMAP and clustering (for each integration method)"
                 },
+                "skip_liana": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip the LIANA step. For large datasets, the pipeline might fail due to high memory usage in this step. Use this option to skip it."
+                },
                 "skip_rankgenesgroups": {
                     "type": "boolean",
                     "default": false,
