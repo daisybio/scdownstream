@@ -54,7 +54,7 @@ if "${task.ext.use_gpu}" == "true":
     model.to_device(0)
 
 model.train(early_stopping=True,
-            max_epochs=int("${max_epochs}") if "${max_epochs}" else None)
+            max_epochs=int("${max_epochs}") if "${max_epochs?:''}" else None)
 
 adata.obsm["X_emb"] = model.get_latent_representation()
 
