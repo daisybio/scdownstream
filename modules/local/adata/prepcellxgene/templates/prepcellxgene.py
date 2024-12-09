@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import os
+
+os.environ["NUMBA_CACHE_DIR"] = "./tmp/numba"
+
 import platform
 import anndata as ad
 import scanpy as sc
