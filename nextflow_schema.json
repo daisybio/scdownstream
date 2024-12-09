@@ -239,6 +239,11 @@
                     "enum": ["zinb", "nb", "poisson", "normal"],
                     "description": "Gene likelihood for scVI/scANVI",
                     "help_text": "Gene likelihood for scVI/scANVI. Can be 'zinb', 'nb', 'poisson', or 'normal'."
+                },
+                "scvi_max_epochs": {
+                    "type": "integer",
+                    "default": null,
+                    "description": "Maximum number of epochs for training scVI/scANVI. If not set, a heuristic provided by scVI/scANVI will be used."
                 }
             }
         },

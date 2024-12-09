@@ -29,5 +29,6 @@ process SCVITOOLS_SCVI {
     n_latent = task.ext.n_latent ?: 30
     dispersion = task.ext.dispersion ?: 'gene'
     gene_likelihood = task.ext.gene_likelihood ?: 'zinb'
+    max_epochs = task.ext.max_epochs ?: null
     template 'scvi.py'
 }
