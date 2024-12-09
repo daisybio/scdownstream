@@ -71,6 +71,11 @@ for adata in adatas:
         adata.obs[col] = column_defaults[col]
     adata.obs = adata.obs[obs_col_intersection]
 
+    for col in obs_col_intersection:
+        if column_dtypes[col] == {"number"}:
+            continue
+        adata.obs[col] = adata.obs[col].astype(str).astype("category")
+
 adata_outer = ad.concat(adatas, join="outer")
 adata_outer.X = csr_matrix(adata_outer.X)
 
