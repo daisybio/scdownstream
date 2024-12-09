@@ -390,15 +390,14 @@
         {
             "$ref": "#/$defs/input_output_options"
         },
-
-        {
-            "$ref": "#/$defs/institutional_config_options"
-        },
         {
             "$ref": "#/$defs/reference_mapping_options"
         },
         {
             "$ref": "#/$defs/pipeline_options"
+        },
+        {
+            "$ref": "#/$defs/scVI_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
