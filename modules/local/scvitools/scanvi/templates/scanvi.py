@@ -54,7 +54,12 @@ else:
         )
     else:
         SCANVI.setup_anndata(adata, batch_key="batch", labels_key="label", unlabeled_category="unknown")
-        model = SCANVI(adata)
+        model = SCANVI(adata,
+                        n_hidden=int("${n_hidden}"),
+                        n_layers=int("${n_layers}"),
+                        n_latent=int("${n_latent}"),
+                        dispersion="${dispersion}",
+                        gene_likelihood="${gene_likelihood}")
 
 if "${task.ext.use_gpu}" == "true":
     model.to_device(0)
