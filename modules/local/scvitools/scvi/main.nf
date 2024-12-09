@@ -24,5 +24,10 @@ process SCVITOOLS_SCVI {
 
     script:
     prefix = task.ext.prefix ?: "${meta.id}"
+    n_hidden = task.ext.n_hidden ?: 128
+    n_layers = task.ext.n_layers ?: 2
+    n_latent = task.ext.n_latent ?: 30
+    dispersion = task.ext.dispersion ?: 'gene'
+    gene_likelihood = task.ext.gene_likelihood ?: 'zinb'
     template 'scvi.py'
 }

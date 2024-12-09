@@ -43,7 +43,12 @@ elif reference_model_type == "scvi":
     model = SCVI.load_query_data(adata, reference_model_path)
 else:
     SCVI.setup_anndata(adata, batch_key = "batch")
-    model = SCVI(adata)
+    model = SCVI(adata,
+                    n_hidden=int("${n_hidden}"),
+                    n_layers=int("${n_layers}"),
+                    n_latent=int("${n_latent}"),
+                    dispersion="${dispersion}",
+                    gene_likelihood="${gene_likelihood}")
 
 if "${task.ext.use_gpu}" == "true":
     model.to_device(0)
