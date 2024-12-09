@@ -205,6 +205,47 @@
                 }
             }
         },
+        "scVI_options": {
+            "title": "scVI/scANVI options",
+            "type": "object",
+            "fa_icon": "fas fa-microscope",
+            "description": "Options for the scVI and scANVI integration methods",
+            "properties": {
+                "scvi_n_latent": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "Number of latent dimensions for scVI/scANVI"
+                },
+                "scvi_n_hidden": {
+                    "type": "integer",
+                    "default": 128,
+                    "description": "Number of hidden units in the neural network for scVI/scANVI"
+                },
+                "scvi_n_layers": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "Number of layers in the neural network for scVI/scANVI"
+                },
+                "scvi_dispersion": {
+                    "type": "string",
+                    "default": "gene",
+                    "enum": ["gene", "gene-batch", "gene-label", "gene-cell"],
+                    "description": "Dispersion parameter for scVI/scANVI",
+                    "help_text": "Dispersion parameter for scVI/scANVI. Can be 'gene', 'gene-batch', 'gene-label', or 'gene-cell'."
+                },
+                "scvi_gene_likelihood": {
+                    "type": "string",
+                    "default": "zinb",
+                    "enum": ["zinb", "nb", "poisson", "normal"],
+                    "description": "Gene likelihood for scVI/scANVI",
+                    "help_text": "Gene likelihood for scVI/scANVI. Can be 'zinb', 'nb', 'poisson', or 'normal'."
+                },
+                "scvi_max_epochs": {
+                    "type": "integer",
+                    "description": "Maximum number of epochs for training scVI/scANVI. If not set, a heuristic provided by scVI/scANVI will be used."
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -349,15 +390,14 @@
         {
             "$ref": "#/$defs/input_output_options"
         },
-
-        {
-            "$ref": "#/$defs/institutional_config_options"
-        },
         {
             "$ref": "#/$defs/reference_mapping_options"
         },
         {
             "$ref": "#/$defs/pipeline_options"
+        },
+        {
+            "$ref": "#/$defs/scVI_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
