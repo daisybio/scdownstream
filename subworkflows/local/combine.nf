@@ -14,6 +14,7 @@ workflow COMBINE {
 
     ch_versions      = Channel.empty()
     ch_obs           = Channel.empty()
+    ch_var           = Channel.empty()
     ch_obsm          = Channel.empty()
     ch_layers        = Channel.empty()
     ch_multiqc_files = Channel.empty()
@@ -22,6 +23,7 @@ workflow COMBINE {
         ch_h5ad.map { meta, h5ad -> [[id: "merged"], h5ad] }.groupTuple(),
         ch_base
     )
+    ch_var           = ADATA_MERGE.out.intersect_genes
     ch_outer         = ADATA_MERGE.out.outer
     ch_versions      = ch_versions.mix(ADATA_MERGE.out.versions)
 
@@ -59,6 +61,7 @@ workflow COMBINE {
     h5ad_inner       = ADATA_MERGE.out.inner
     integrations     = ch_integrations
     obs              = ch_obs
+    var              = ch_var
     obsm             = ch_obsm
     layers           = ch_layers
 

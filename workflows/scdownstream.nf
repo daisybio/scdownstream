@@ -35,6 +35,7 @@ workflow SCDOWNSTREAM {
     ch_versions = Channel.empty()
     ch_integrations = Channel.empty()
     ch_obs = Channel.empty()
+    ch_var = Channel.empty()
     ch_obsm = Channel.empty()
     ch_obsp = Channel.empty()
     ch_uns = Channel.empty()
@@ -68,6 +69,7 @@ workflow SCDOWNSTREAM {
             ch_versions      = ch_versions.mix(COMBINE.out.versions)
             ch_multiqc_files = ch_multiqc_files.mix(COMBINE.out.multiqc_files)
             ch_obs           = ch_obs.mix(COMBINE.out.obs)
+            ch_var           = ch_var.mix(COMBINE.out.var)
             ch_obsm          = ch_obsm.mix(COMBINE.out.obsm)
             ch_layers        = ch_layers.mix(COMBINE.out.layers)
             ch_integrations  = ch_integrations.mix(COMBINE.out.integrations)
@@ -114,7 +116,7 @@ workflow SCDOWNSTREAM {
         ch_uns = ch_uns.mix(PER_GROUP.out.uns)
         ch_multiqc_files = ch_multiqc_files.mix(PER_GROUP.out.multiqc_files)
 
-        FINALIZE(ch_finalization_base, ch_obs, ch_obsm, ch_obsp, ch_uns, ch_layers)
+        FINALIZE(ch_finalization_base, ch_obs, ch_var, ch_obsm, ch_obsp, ch_uns, ch_layers)
         ch_versions = ch_versions.mix(FINALIZE.out.versions)
     }
 

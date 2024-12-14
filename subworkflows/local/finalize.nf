@@ -6,6 +6,7 @@ workflow FINALIZE {
     take:
     ch_h5ad
     ch_obs
+    ch_var
     ch_obsm
     ch_obsp
     ch_uns
@@ -16,6 +17,7 @@ workflow FINALIZE {
 
     ADATA_EXTEND(ch_h5ad,
         ch_obs.flatten().collect().ifEmpty([]),
+        ch_var.flatten().collect().ifEmpty([]),
         ch_obsm.flatten().collect().ifEmpty([]),
         ch_obsp.flatten().collect().ifEmpty([]),
         ch_uns.flatten().collect().ifEmpty([]),
