@@ -79,9 +79,11 @@ for adata in adatas:
 adata_outer = ad.concat(adatas, join="outer")
 adata_outer.X = csr_matrix(adata_outer.X)
 
-genes_intersection = list(set(adata_outer.var_names).intersection(*genes))
-sorted(genes_intersection)
-adata_inner = adata_outer[:, genes_intersection]
+gene_intersection = set(genes[0]).intersection(*genes[1:])
+intersection_mask = adata_outer.var_names.to_series(name='intersection').map(lambda x: x in gene_intersection)
+adata_inner = adata_outer[:, intersection_mask]
+
+intersection_mask.to_pickle("gene_intersection.pkl")
 
 adata_outer.write("${prefix}_outer.h5ad")
 adata_inner.write("${prefix}_inner.h5ad")

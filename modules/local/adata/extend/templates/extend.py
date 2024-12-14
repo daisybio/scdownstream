@@ -30,6 +30,7 @@ def format_yaml_like(data: dict, indent: int = 0) -> str:
 adata = ad.read_h5ad("${base}")
 prefix = "${prefix}"
 obs_paths = "${obs}".split()
+var_paths = "${var}".split()
 obsm_paths = "${obsm}".split()
 obsp_paths = "${obsp}".split()
 uns_paths = "${uns}".split()
@@ -42,6 +43,10 @@ def simple_name(path):
 for path in obs_paths:
     df = pd.read_pickle(path).reindex(adata.obs_names)
     adata.obs = pd.concat([adata.obs, df], axis=1)
+
+for path in var_paths:
+    df = pd.read_pickle(path).reindex(adata.var_names)
+    adata.var = pd.concat([adata.var, df], axis=1)
 
 for path in obsm_paths:
     df = pd.read_pickle(path).reindex(adata.obs_names)

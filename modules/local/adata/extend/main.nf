@@ -10,6 +10,7 @@ process ADATA_EXTEND {
     input:
     tuple val(meta), path(base)
     path(obs)
+    path(var)
     path(obsm)
     path(obsp)
     path(uns)
