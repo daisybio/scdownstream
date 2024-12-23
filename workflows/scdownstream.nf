@@ -77,7 +77,8 @@ workflow SCDOWNSTREAM {
             ch_finalization_base = COMBINE.out.h5ad
         }
 
-        ch_label_grouping = COMBINE.out.h5ad_inner.map{meta, h5ad -> [meta + [obs_key: 'label'], h5ad]}
+        ch_label_grouping = COMBINE.out.h5ad_inner
+        grouping_col = "label"
     } else {
         ch_embeddings = Channel.value(params.base_embeddings.split(',').collect{it.trim()})
 
@@ -91,7 +92,8 @@ workflow SCDOWNSTREAM {
         )
 
         ch_finalization_base = ch_base
-        ch_label_grouping = ch_base.map{meta, h5ad -> [meta + [obs_key: params.base_label_col], h5ad]}
+        ch_label_grouping = ch_base
+        grouping_col = params.base_label_col
     }
 
     //
@@ -109,8 +111,8 @@ workflow SCDOWNSTREAM {
 
         PER_GROUP(
             CLUSTER.out.h5ad_clustering.map{meta, h5ad -> [meta + [obs_key: "${meta.id}_leiden"], h5ad]},
-            CLUSTER.out.h5ad_neighbors.map{meta, h5ad -> [meta + [obs_key: "label"], h5ad]},
-            ch_label_grouping
+            CLUSTER.out.h5ad_neighbors.map{meta, h5ad -> [meta + [obs_key: grouping_col], h5ad]},
+            ch_label_grouping.map{meta, h5ad -> [meta + [obs_key: grouping_col], h5ad]}
         )
         ch_versions = ch_versions.mix(PER_GROUP.out.versions)
         ch_uns = ch_uns.mix(PER_GROUP.out.uns)
