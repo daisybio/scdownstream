@@ -4,8 +4,8 @@ process ADATA_BARCODES {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/anndata:0.10.7--e9840a94592528c8':
-        'community.wave.seqera.io/library/anndata:0.10.7--336c6c1921a0632b' }"
+        'oras://community.wave.seqera.io/library/anndata:0.11.1--426fb199a9be8838':
+        'community.wave.seqera.io/library/anndata:0.11.1--75463acd25743929' }"
 
     input:
     tuple val(meta), path(h5ad), path(barcodes_csv)

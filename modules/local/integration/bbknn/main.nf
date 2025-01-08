@@ -4,8 +4,8 @@ process INTEGRATION_BBKNN {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/bbknn_scanpy:fb4848dceae3b61e':
-        'community.wave.seqera.io/library/bbknn_scanpy:4483a0dcd62fb885' }"
+        'oras://community.wave.seqera.io/library/bbknn_scanpy:51468e4ffb8f2c02':
+        'community.wave.seqera.io/library/bbknn_scanpy:81e46c935f05bf4f' }"
 
     input:
     tuple val(meta), path(h5ad)

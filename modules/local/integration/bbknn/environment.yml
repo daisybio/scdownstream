@@ -4,4 +4,4 @@ channels:
   - bioconda
 dependencies:
   - bioconda::bbknn=1.6.0
-  - conda-forge::scanpy=1.10.1
+  - conda-forge::scanpy=1.10.4

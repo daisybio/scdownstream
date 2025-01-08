@@ -4,4 +4,4 @@ channels:
   - bioconda
 dependencies:
   - bioconda::mygene=3.2.2
-  - conda-forge::scanpy=1.10.2
+  - conda-forge::scanpy=1.10.4

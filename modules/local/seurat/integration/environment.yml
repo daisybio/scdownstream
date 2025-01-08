@@ -3,5 +3,6 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - bioconda::bioconductor-singlecellexperiment=1.24.0
-  - conda-forge::r-seurat=5.0.3
+  - bioconda::bioconductor-glmgampoi=1.18.0
+  - bioconda::bioconductor-singlecellexperiment=1.28.0
+  - conda-forge::r-seurat=5.1.0

@@ -4,8 +4,8 @@ process CELLTYPES_CELLTYPIST {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/celltypist_scanpy:ade3fa2252062a50':
-        'community.wave.seqera.io/library/celltypist_scanpy:6aa0dd8de0c12fae' }"
+        'oras://community.wave.seqera.io/library/celltypist_scanpy:89a98f51262cfff4':
+        'community.wave.seqera.io/library/celltypist_scanpy:44b604b24dd4cf33' }"
 
     input:
     tuple val(meta), path(h5ad)

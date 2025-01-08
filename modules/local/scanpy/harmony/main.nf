@@ -4,10 +4,10 @@ process SCANPY_HARMONY {
     label 'process_gpu'
 
     conda "${moduleDir}/environment.yml"
-    container "${ task.ext.use_gpu ? 'ghcr.io/scverse/rapids_singlecell:v0.10.11' :
+    container "${ task.ext.use_gpu ? 'ghcr.io/scverse/rapids_singlecell:v0.11.0' :
         workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/harmonypy_scanpy:25dd7b6ef4c76098':
-        'community.wave.seqera.io/library/harmonypy_scanpy:e9c9a621297da9ea' }"
+        'oras://community.wave.seqera.io/library/harmonypy_scanpy:411ceead43b47bef':
+        'community.wave.seqera.io/library/harmonypy_scanpy:f8b4f79ab119d93e' }"
 
     input:
     tuple val(meta), path(h5ad)

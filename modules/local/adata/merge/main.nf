@@ -5,8 +5,8 @@ process ADATA_MERGE {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/scanpy:1.10.1--ea08051addf267ac':
-        'community.wave.seqera.io/library/scanpy:1.10.1--0c8c97148fc05558' }"
+        'oras://community.wave.seqera.io/library/scanpy:1.10.4--c2d474f46255931c':
+        'community.wave.seqera.io/library/scanpy:1.10.4--f905699eb17b6536' }"
 
     input:
     tuple val(meta),  path(h5ads)

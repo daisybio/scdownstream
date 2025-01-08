@@ -4,8 +4,8 @@ process SEURAT_INTEGRATION {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/bioconductor-glmgampoi_bioconductor-singlecellexperiment_r-seurat:7a3341fe2726a040':
-        'community.wave.seqera.io/library/bioconductor-glmgampoi_bioconductor-singlecellexperiment_r-seurat:ef587738ace9ddf5' }"
+        'oras://community.wave.seqera.io/library/bioconductor-glmgampoi_bioconductor-singlecellexperiment_r-seurat:9f31f8040ed0996a':
+        'community.wave.seqera.io/library/bioconductor-glmgampoi_bioconductor-singlecellexperiment_r-seurat:379d40215d028661' }"
 
     input:
     tuple val(meta), path(rds)
