@@ -4,7 +4,7 @@ process SCVITOOLS_SCANVI {
     label 'process_gpu'
 
     conda "${moduleDir}/environment.yml"
-    container "${ task.ext.use_gpu ? 'docker.io/nicotru/scvitools-gpu:cuda-12' :
+    container "${ task.ext.use_gpu ? 'wave.seqera.io/wt/79e3de7f2aa3/wave/build:9b3240b0e1af35be' :
         workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'oras://community.wave.seqera.io/library/anndata_scvi-tools:27bf1effeac7f96c':
         'community.wave.seqera.io/library/anndata_scvi-tools:ffa9ea8d87e194a8' }"
