@@ -7,5 +7,5 @@ dependencies:
   - torchvision
   - torchaudio
   - pytorch-cuda=12.4
-  - jaxlib=*=cuda12*
+  - jaxlib=0.4.31=cuda12*
   - scvi-tools=1.2.2
