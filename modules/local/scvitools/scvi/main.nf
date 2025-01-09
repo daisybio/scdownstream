@@ -6,8 +6,8 @@ process SCVITOOLS_SCVI {
     conda "${moduleDir}/environment.yml"
     container "${ task.ext.use_gpu ? 'docker.io/nicotru/scvitools-gpu:cuda-12' :
         workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/anndata_scvi-tools:54d2eb2f946e0e43':
-        'community.wave.seqera.io/library/anndata_scvi-tools:fa9451a13918eae0' }"
+        'oras://community.wave.seqera.io/library/anndata_scvi-tools:27bf1effeac7f96c':
+        'community.wave.seqera.io/library/anndata_scvi-tools:ffa9ea8d87e194a8' }"
 
     input:
     tuple val(meta), path(h5ad)
