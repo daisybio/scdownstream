@@ -4,8 +4,8 @@ process CELDA_DECONTX {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/anndata2ri_bioconductor-celda_anndata:de20d5cbd4f86aa6':
-        'community.wave.seqera.io/library/anndata2ri_bioconductor-celda_anndata:31bbf686a87fe0aa' }"
+        'oras://community.wave.seqera.io/library/anndata2ri_bioconductor-celda_anndata:b00344b12c58adb2':
+        'community.wave.seqera.io/library/anndata2ri_bioconductor-celda_anndata:b7d0f9b19bf27e00' }"
 
     input:
     tuple val(meta), path(h5ad), path(raw)

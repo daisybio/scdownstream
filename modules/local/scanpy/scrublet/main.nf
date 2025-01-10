@@ -4,10 +4,10 @@ process SCANPY_SCRUBLET {
     label 'process_gpu'
 
     conda "${moduleDir}/environment.yml"
-    container "${ task.ext.use_gpu ? 'ghcr.io/scverse/rapids_singlecell:v0.10.11' :
+    container "${ task.ext.use_gpu ? 'ghcr.io/scverse/rapids_singlecell:v0.11.0' :
         workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/scanpy_scikit-image:185956e1b73ad93d':
-        'community.wave.seqera.io/library/scanpy_scikit-image:066cc4cb329a805c' }"
+        'oras://community.wave.seqera.io/library/scanpy_scikit-image:b6fd928892eb1ee9':
+        'community.wave.seqera.io/library/scanpy_scikit-image:da08bbc13cee72b2' }"
 
     input:
     tuple val(meta), path(h5ad)

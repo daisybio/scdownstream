@@ -4,8 +4,8 @@ process ADATA_UNIFY {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/mygene_scanpy:3babaf5112b851c5':
-        'community.wave.seqera.io/library/mygene_scanpy:a0094207ba58dbca' }"
+        'oras://community.wave.seqera.io/library/mygene_scanpy:fe39686ba0c901e7':
+        'community.wave.seqera.io/library/mygene_scanpy:b8864cab99d32be2' }"
 
     input:
     tuple val(meta), path(h5ad)

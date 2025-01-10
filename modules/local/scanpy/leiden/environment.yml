@@ -4,5 +4,5 @@ channels:
   - bioconda
 dependencies:
   - conda-forge::leidenalg=0.10.2
-  - conda-forge::python-igraph=0.11.4
-  - conda-forge::scanpy=1.10.1
+  - conda-forge::python-igraph=0.11.8
+  - conda-forge::scanpy=1.10.4

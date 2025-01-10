@@ -4,8 +4,8 @@ process SCANPY_PAGA {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/python-igraph_scanpy:a7114d55b0af3893':
-        'community.wave.seqera.io/library/python-igraph_scanpy:5f677450e42211ef' }"
+        'oras://community.wave.seqera.io/library/python-igraph_scanpy:f3ad4bc653796b1b':
+        'community.wave.seqera.io/library/python-igraph_scanpy:e3d5b4ea56e99f52' }"
 
     input:
     tuple val(meta), path(h5ad)

@@ -4,8 +4,8 @@ process CUSTOM_COLLECTSIZES {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/pandas:2.2.2--4f1ae4025b6a600d':
-        'community.wave.seqera.io/library/pandas:2.2.2--bd3db773995db54e' }"
+        'oras://community.wave.seqera.io/library/pandas:2.2.3--e136a7b7218cc69c':
+        'community.wave.seqera.io/library/pandas:2.2.3--9b034ee33172d809' }"
 
     input:
     tuple val(meta), path(sizes)
