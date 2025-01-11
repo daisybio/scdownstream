@@ -62,30 +62,30 @@
             },
             "min_genes": {
                 "type": "integer",
-                "minimum": 1,
+                "minimum": 0,
                 "default": 1,
-                "errorMessage": "Minimum number of genes must be an integer greater than 0.",
+                "errorMessage": "Minimum number of genes must be a positive integer (zero included).",
                 "meta": ["min_genes"]
             },
             "min_cells": {
                 "type": "integer",
-                "minimum": 1,
+                "minimum": 0,
                 "default": 1,
-                "errorMessage": "Minimum number of cells must be an integer greater than 0.",
+                "errorMessage": "Minimum number of cells must be a positive integer (zero included).",
                 "meta": ["min_cells"]
             },
             "min_counts_cell": {
                 "type": "integer",
-                "minimum": 1,
+                "minimum": 0,
                 "default": 1,
-                "errorMessage": "Minimum number of counts per cell must be an integer greater than 0.",
+                "errorMessage": "Minimum number of counts per cell must be a positive integer (zero included).",
                 "meta": ["min_counts_cell"]
             },
             "min_counts_gene": {
                 "type": "integer",
-                "minimum": 1,
+                "minimum": 0,
                 "default": 1,
-                "errorMessage": "Minimum number of counts per gene must be an integer greater than 0.",
+                "errorMessage": "Minimum number of counts per gene must be a positive integer (zero included).",
                 "meta": ["min_counts_gene"]
             },
             "max_mito_percentage": {
