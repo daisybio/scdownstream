@@ -1,0 +1,11 @@
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.4
+  - jaxlib=0.4.31=cuda12*
+  - scvi-tools=1.2.2
